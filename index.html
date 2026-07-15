@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0f172a">
+  <title>Cash Flow</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div><p class="eyebrow">Фінансовий кабінет</p><h1>Cash Flow</h1></div>
+      <button class="icon-button" id="refreshButton" type="button">↻</button>
+    </header>
+    <section class="date-panel">
+      <button class="date-arrow" id="previousDay" type="button">‹</button>
+      <div class="date-center"><span>Дата звіту</span><strong id="reportDate">14.07.2026</strong></div>
+      <button class="date-arrow" id="nextDay" type="button">›</button>
+    </section>
+    <section class="summary-card">
+      <div><span>Загальний залишок на кінець дня</span><strong id="totalClosing">0,00 ₴</strong></div>
+      <div class="summary-badge">4 підприємства</div>
+    </section>
+    <main class="companies-grid" id="companiesGrid"></main>
+    <p class="sync-note" id="syncNote">Демонстраційні дані. Make ще не підключено.</p>
+  </div>
+  <div class="modal-backdrop hidden" id="detailsModal" aria-hidden="true">
+    <section class="modal-sheet" role="dialog" aria-modal="true">
+      <div class="modal-handle"></div>
+      <header class="modal-header">
+        <div><p class="eyebrow" id="modalCompany">Підприємство</p><h2 id="modalTitle">Розшифровка</h2></div>
+        <button class="icon-button close-button" id="closeModal" type="button">×</button>
+      </header>
+      <div class="modal-total"><span>Разом</span><strong id="modalTotal">0,00 ₴</strong></div>
+      <div class="operations-list" id="operationsList"></div>
+    </section>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
