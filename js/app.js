@@ -1,3 +1,4 @@
+import { fetchDashboard, fetchOperations } from "./api.js";
 "use strict";
 
 const telegram = window.Telegram?.WebApp;
@@ -143,6 +144,37 @@ const cashflowData = {
     }
   ]
 };
+async function loadDashboard() {
+  try {
+    const data = await fetchDashboard({
+      date: "2026-07-18",
+      telegramId: telegram?.initDataUnsafe?.user?.id || 123456789
+    });
+
+    console.log("Dashboard:", data);
+
+    const syncNote = document.getElementById("syncNote");
+
+    if (syncNote) {
+      syncNote.textContent = `API працює. Отримано компаній: ${
+        data.companies?.length ?? 0
+      }`;
+    }
+  } catch (error) {
+    console.error(error);
+
+    const syncNote = document.getElementById("syncNote");
+
+    if (syncNote) {
+      syncNote.textContent = `Помилка API: ${error.message}`;
+    }
+  }
+}
+telegram.ready();
+
+console.log("Telegram user:", telegram.initDataUnsafe);
+
+loadDashboard();
 
 function getElement(id) {
   const element = document.getElementById(id);
