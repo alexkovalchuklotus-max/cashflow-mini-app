@@ -147,8 +147,28 @@ const cashflowData = {
 async function loadDashboard() {
   const syncNote = document.getElementById("syncNote");
 
-  if (syncNote) {
-    syncNote.textContent = "JavaScript працює";
+  try {
+    if (syncNote) {
+      syncNote.textContent = "Запит до Make...";
+    }
+
+    const data = await fetchDashboard({
+      date: "2026-07-18",
+      telegramId: telegram.initDataUnsafe?.user?.id || 123456789
+    });
+
+    console.log(data);
+
+    if (syncNote) {
+      syncNote.textContent = `API OK. Компаній: ${data.companies.length}`;
+    }
+
+  } catch (error) {
+    console.error(error);
+
+    if (syncNote) {
+      syncNote.textContent = error.message;
+    }
   }
 }
 
