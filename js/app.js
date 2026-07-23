@@ -145,35 +145,15 @@ const cashflowData = {
   ]
 };
 async function loadDashboard() {
-  try {
-    const data = await fetchDashboard({
-      date: "2026-07-18",
-      telegramId: telegram?.initDataUnsafe?.user?.id || 123456789
-    });
+  const syncNote = document.getElementById("syncNote");
 
-    console.log("Dashboard:", data);
-
-    const syncNote = document.getElementById("syncNote");
-
-    if (syncNote) {
-      syncNote.textContent = `API працює. Отримано компаній: ${
-        data.companies?.length ?? 0
-      }`;
-    }
-  } catch (error) {
-    console.error(error);
-
-    const syncNote = document.getElementById("syncNote");
-
-    if (syncNote) {
-      syncNote.textContent = `Помилка API: ${error.message}`;
-    }
+  if (syncNote) {
+    syncNote.textContent = "JavaScript працює";
   }
 }
+
 telegram.ready();
-
-console.log("Telegram user:", telegram.initDataUnsafe);
-
+telegram.expand();
 loadDashboard();
 
 function getElement(id) {
@@ -417,6 +397,7 @@ function setupTelegram() {
 
   telegram.ready();
   telegram.expand();
+  loadDashboard();
 
   telegram.setHeaderColor?.("#eef2f7");
   telegram.setBackgroundColor?.("#eef2f7");
