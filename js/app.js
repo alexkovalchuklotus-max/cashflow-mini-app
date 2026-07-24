@@ -423,7 +423,7 @@ async function openDetails(companyIndex, type) {
 
   try {
     const data = await fetchOperations({
-      date: "2026-07-18",
+      date: cashflowData.date,
       companyCode: company.code,
       type: type,
       telegramId: telegram?.initDataUnsafe?.user?.id || 123456789
