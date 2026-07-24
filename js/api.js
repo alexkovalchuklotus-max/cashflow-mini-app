@@ -45,10 +45,19 @@ export async function fetchOperations({
   })}`;
 
   const response = await fetch(url);
-  
-  const text = await response.text();
-console.log(text);
-throw new Error(text);
+
+  if (!response.ok) {
+    throw new Error(`Operations API error: ${response.status}`);
+  }
+
+  const data = await response.json();
+
+  if (data.success === false) {
+    throw new Error(data.error?.message || "Не вдалося отримати операції.");
+  }
+
+  return data;
+}
 
   //if (!response.ok) {
    // throw new Error(`Operations API error: ${response.status}`);
