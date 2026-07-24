@@ -3,7 +3,7 @@ import { fetchDashboard, fetchOperations } from "./api.js";
 
 const telegram = window.Telegram?.WebApp;
 
-const cashflowData = {
+let cashflowData = {
   date: "14.07.2026",
 
   companies: [
@@ -144,34 +144,65 @@ const cashflowData = {
     }
   ]
 };
+//async function loadDashboard() {
+  //const syncNote = document.getElementById("syncNote");
+
+  //try {
+    //if (syncNote) {
+     // syncNote.textContent = "Запит до Make...";
+    //}
+
+    //const data = await fetchDashboard({
+     // date: "2026-07-18",
+      //telegramId: telegram.initDataUnsafe?.user?.id || 123456789
+    //});
+
+    //console.log(data);
+
+    //if (syncNote) {
+      //syncNote.textContent = `API OK. Компаній: ${data.companies.length}`;
+   // }
+
+  //} catch (error) {
+    //console.error(error);
+
+    //if (syncNote) {
+     // syncNote.textContent = error.message;
+   // }
+  //}
+//}
+
 async function loadDashboard() {
   const syncNote = document.getElementById("syncNote");
 
   try {
     if (syncNote) {
-      syncNote.textContent = "Запит до Make...";
+      syncNote.textContent = "Завантаження даних...";
     }
 
     const data = await fetchDashboard({
       date: "2026-07-18",
-      telegramId: telegram.initDataUnsafe?.user?.id || 123456789
+      telegramId: telegram?.initDataUnsafe?.user?.id || 123456789
     });
 
-    console.log(data);
+    cashflowData = {
+      date: data.date,
+      companies: Array.isArray(data.companies) ? data.companies : []
+    };
+
+    renderDashboard();
 
     if (syncNote) {
-      syncNote.textContent = `API OK. Компаній: ${data.companies.length}`;
+      syncNote.textContent = `Дані оновлено. Компаній: ${cashflowData.companies.length}`;
     }
-
   } catch (error) {
     console.error(error);
 
     if (syncNote) {
-      syncNote.textContent = error.message;
+      syncNote.textContent = `Помилка API: ${error.message}`;
     }
   }
 }
-
 telegram.ready();
 telegram.expand();
 loadDashboard();
