@@ -377,15 +377,13 @@ function createOperationCard(operation) {
   `;
 }
 
-function openDetails(companyIndex, type) {
+async function openDetails(companyIndex, type) {
   const company = cashflowData.companies[companyIndex];
 
   if (!company) {
     console.error("Компанію не знайдено:", companyIndex);
     return;
   }
-
-  const operations = company.details?.[type] ?? [];
 
   const modalCompany = getElement("modalCompany");
   const modalTitle = getElement("modalTitle");
@@ -403,10 +401,6 @@ function openDetails(companyIndex, type) {
     return;
   }
 
-  const total = operations.reduce((sum, operation) => {
-    return sum + Number(operation.amount || 0);
-  }, 0);
-
   modalCompany.textContent = `${company.code} · ${company.name}`;
 
   modalTitle.textContent =
@@ -414,20 +408,56 @@ function openDetails(companyIndex, type) {
       ? "Надходження"
       : "Платежі";
 
-  modalTotal.textContent = formatMoney(total);
+  modalTotal.textContent = "0,00 ₴";
 
-  operationsList.innerHTML = operations.length
-    ? operations.map(createOperationCard).join("")
-    : `
-      <div class="empty-state">
-        Операцій за цей день немає.
-      </div>
-    `;
+  operationsList.innerHTML = `
+    <div class="empty-state">
+      Завантаження...
+    </div>
+  `;
 
   detailsModal.classList.remove("hidden");
   detailsModal.setAttribute("aria-hidden", "false");
 
   telegram?.HapticFeedback?.impactOccurred("light");
+
+  try {
+    const data = await fetchOperations({
+      date: "2026-07-18",
+      companyCode: company.code,
+      type: type,
+      telegramId: telegram?.initDataUnsafe?.user?.id || 123456789
+    });
+
+    const operations = Array.isArray(data.operations)
+      ? data.operations
+      : [];
+
+    const total = operations.reduce((sum, operation) => {
+      return sum + Number(operation.amount || 0);
+    }, 0);
+
+    modalTotal.textContent = formatMoney(total);
+
+    operationsList.innerHTML = operations.length
+      ? operations.map(createOperationCard).join("")
+      : `
+        <div class="empty-state">
+          Операцій за цей день немає.
+        </div>
+      `;
+
+  } catch (error) {
+    console.error("Operations API error:", error);
+
+    modalTotal.textContent = "0,00 ₴";
+
+    operationsList.innerHTML = `
+      <div class="empty-state">
+        Не вдалося завантажити операції.
+      </div>
+    `;
+  }
 }
 
 function closeDetails() {
