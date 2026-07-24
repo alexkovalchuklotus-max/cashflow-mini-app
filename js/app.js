@@ -499,16 +499,11 @@ function setupEvents() {
     }
   });
 
-  refreshButton?.addEventListener("click", () => {
-    const syncNote = getElement("syncNote");
+  refreshButton?.addEventListener("click", async () => {
+  await loadDashboard(cashflowData.date);
 
-    if (syncNote) {
-      syncNote.textContent =
-        "Дані оновлено. Поки використовується демо-режим.";
-    }
-
-    telegram?.HapticFeedback?.notificationOccurred("success");
-  });
+  telegram?.HapticFeedback?.notificationOccurred("success");
+});
 
   previousDayButton?.addEventListener("click", async () => {
   const currentDate = new Date(`${cashflowData.date}T12:00:00`);
