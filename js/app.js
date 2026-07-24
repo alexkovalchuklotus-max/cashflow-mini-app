@@ -172,7 +172,7 @@ let cashflowData = {
   //}
 //}
 
-async function loadDashboard() {
+async function loadDashboard(date = cashflowData.date) {
   const syncNote = document.getElementById("syncNote");
 
   try {
@@ -181,7 +181,7 @@ async function loadDashboard() {
     }
 
     const data = await fetchDashboard({
-      date: "2026-07-18",
+      date: date,
       telegramId: telegram?.initDataUnsafe?.user?.id || 123456789
     });
 
@@ -510,13 +510,25 @@ function setupEvents() {
     telegram?.HapticFeedback?.notificationOccurred("success");
   });
 
-  previousDayButton?.addEventListener("click", () => {
-    alert("Вибір дати підключимо наступним кроком.");
-  });
+  previousDayButton?.addEventListener("click", async () => {
+  const currentDate = new Date(`${cashflowData.date}T12:00:00`);
 
-  nextDayButton?.addEventListener("click", () => {
-    alert("Вибір дати підключимо наступним кроком.");
-  });
+  currentDate.setDate(currentDate.getDate() - 1);
+
+  const newDate = currentDate.toISOString().split("T")[0];
+
+  await loadDashboard(newDate);
+});
+
+nextDayButton?.addEventListener("click", async () => {
+  const currentDate = new Date(`${cashflowData.date}T12:00:00`);
+
+  currentDate.setDate(currentDate.getDate() + 1);
+
+  const newDate = currentDate.toISOString().split("T")[0];
+
+  await loadDashboard(newDate);
+});
 }
 
 function initApp() {
