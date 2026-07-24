@@ -4,7 +4,7 @@ import { fetchDashboard, fetchOperations } from "./api.js";
 const telegram = window.Telegram?.WebApp;
 
 let cashflowData = {
-  date: "14.07.2026",
+  date: "2026-07-18",
 
   companies: [
     {
@@ -149,11 +149,11 @@ let cashflowData = {
 
   //try {
     //if (syncNote) {
-     // syncNote.textContent = "Запит до Make...";
+      //syncNote.textContent = "Запит до Make...";
     //}
 
     //const data = await fetchDashboard({
-     // date: "2026-07-18",
+      //date: "2026-07-18",
       //telegramId: telegram.initDataUnsafe?.user?.id || 123456789
     //});
 
@@ -161,14 +161,14 @@ let cashflowData = {
 
     //if (syncNote) {
       //syncNote.textContent = `API OK. Компаній: ${data.companies.length}`;
-   // }
+    //}
 
-  //} catch (error) {
+ // } catch (error) {
     //console.error(error);
 
     //if (syncNote) {
-     // syncNote.textContent = error.message;
-   // }
+      //syncNote.textContent = error.message;
+    //}
   //}
 //}
 
@@ -521,6 +521,8 @@ function setupEvents() {
 });
 
 nextDayButton?.addEventListener("click", async () => {
+
+   console.log("RIGHT CLICK", cashflowData.date);
   const currentDate = new Date(`${cashflowData.date}T12:00:00`);
 
   currentDate.setDate(currentDate.getDate() + 1);
