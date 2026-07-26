@@ -516,15 +516,50 @@ function setupEvents() {
 });
 
 nextDayButton?.addEventListener("click", async () => {
-
-   console.log("RIGHT CLICK", cashflowData.date);
   const currentDate = new Date(`${cashflowData.date}T12:00:00`);
 
   currentDate.setDate(currentDate.getDate() + 1);
 
   const newDate = currentDate.toISOString().split("T")[0];
+  const syncNote = getElement("syncNote");
 
-  await loadDashboard(newDate);
+  try {
+    const data = await fetchDashboard({
+      date: newDate,
+      telegramId: telegram?.initDataUnsafe?.user?.id || 123456789
+    });
+
+    const companies = Array.isArray(data.companies)
+      ? data.companies
+      : [];
+
+    if (companies.length === 0) {
+      if (syncNote) {
+        syncNote.textContent = "Новіших даних поки немає.";
+      }
+
+      telegram?.HapticFeedback?.notificationOccurred("warning");
+      return;
+    }
+
+    cashflowData = {
+      date: data.date,
+      companies
+    };
+
+    renderDashboard();
+
+    if (syncNote) {
+      syncNote.textContent = `Дані оновлено. Компаній: ${companies.length}`;
+    }
+
+  } catch (error) {
+    console.error(error);
+
+    if (syncNote) {
+      syncNote.textContent = `Помилка API: ${error.message}`;
+    }
+  }
 });
 }
 
