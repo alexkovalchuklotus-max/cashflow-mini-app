@@ -5,144 +5,7 @@ const telegram = window.Telegram?.WebApp;
 
 let cashflowData = {
   date: "2026-07-18",
-
-  companies: [
-    {
-      code: "ЗЗД",
-      name: "ЗЕРНОЗБУД",
-      accent: "#15803d",
-
-      opening: 7561913.56,
-      income: 482300,
-      payments: 315800,
-      closing: 7728413.56,
-
-      details: {
-        income: [
-          {
-            counterparty: "ТОВ «Агро Партнер»",
-            purpose: "Оплата за поставлене зерно",
-            amount: 300000
-          },
-          {
-            counterparty: "ТОВ «Трейд Сервіс»",
-            purpose: "Погашення дебіторської заборгованості",
-            amount: 182300
-          }
-        ],
-
-        payments: [
-          {
-            counterparty: "ТОВ «Добрива Плюс»",
-            purpose: "Оплата за мінеральні добрива",
-            amount: 185800
-          },
-          {
-            counterparty: "Податки",
-            purpose: "ПДВ та обов'язкові платежі",
-            amount: 130000
-          }
-        ]
-      }
-    },
-
-    {
-      code: "МЛ",
-      name: "МАТІОС ЛОГІСТІК",
-      accent: "#1d4ed8",
-
-      opening: 2258981.97,
-      income: 140000,
-      payments: 96500,
-      closing: 2302481.97,
-
-      details: {
-        income: [
-          {
-            counterparty: "ТОВ «Карго Груп»",
-            purpose: "Оплата логістичних послуг",
-            amount: 140000
-          }
-        ],
-
-        payments: [
-          {
-            counterparty: "Паливна компанія",
-            purpose: "Дизельне пальне",
-            amount: 61500
-          },
-          {
-            counterparty: "СТО",
-            purpose: "Технічне обслуговування транспорту",
-            amount: 35000
-          }
-        ]
-      }
-    },
-
-    {
-      code: "КВ",
-      name: "КВ АГРО ГРУП",
-      accent: "#c2410c",
-
-      opening: 3045764.15,
-      income: 275000,
-      payments: 198750,
-      closing: 3122014.15,
-
-      details: {
-        income: [
-          {
-            counterparty: "ТОВ «Зерно Інвест»",
-            purpose: "Оплата за товар",
-            amount: 275000
-          }
-        ],
-
-        payments: [
-          {
-            counterparty: "ТОВ «Насіння Україна»",
-            purpose: "Оплата за посівний матеріал",
-            amount: 128750
-          },
-          {
-            counterparty: "Оренда",
-            purpose: "Орендна плата за склад",
-            amount: 70000
-          }
-        ]
-      }
-    },
-
-    {
-      code: "БС",
-      name: "БАЗА СЕРВІС",
-      accent: "#6d28d9",
-
-      opening: 75595.38,
-      income: 42000,
-      payments: 18500,
-      closing: 99095.38,
-
-      details: {
-        income: [
-          {
-            counterparty: "ТОВ «Сервіс Лайн»",
-            purpose: "Оплата за послуги",
-            amount: 42000
-          }
-        ],
-
-        payments: [
-          {
-            counterparty: "Комунальні послуги",
-            purpose: "Електроенергія та водопостачання",
-            amount: 18500
-          }
-        ]
-      }
-    }
-  ]
+  companies: []
 };
 //async function loadDashboard() {
   //const syncNote = document.getElementById("syncNote");
@@ -181,26 +44,44 @@ async function loadDashboard(date = cashflowData.date) {
     }
 
     const data = await fetchDashboard({
-      date: date,
+      date,
       telegramId: telegram?.initDataUnsafe?.user?.id || 123456789
     });
 
+    const companies = Array.isArray(data.companies)
+      ? data.companies
+      : [];
+
+    if (companies.length === 0) {
+      if (syncNote) {
+        syncNote.textContent = "За цю дату даних немає.";
+      }
+
+      telegram?.HapticFeedback?.notificationOccurred("warning");
+      return false;
+    }
+
     cashflowData = {
       date: data.date,
-      companies: Array.isArray(data.companies) ? data.companies : []
+      companies
     };
 
     renderDashboard();
 
     if (syncNote) {
-      syncNote.textContent = `Дані оновлено. Компаній: ${cashflowData.companies.length}`;
+      syncNote.textContent = `Дані оновлено. Компаній: ${companies.length}`;
     }
+
+    return true;
+
   } catch (error) {
     console.error(error);
 
     if (syncNote) {
       syncNote.textContent = `Помилка API: ${error.message}`;
     }
+
+    return false;
   }
 }
 telegram.ready();
@@ -545,6 +426,7 @@ nextDayButton?.addEventListener("click", async () => {
     cashflowData = {
       date: data.date,
       companies
+
     };
 
     renderDashboard();
