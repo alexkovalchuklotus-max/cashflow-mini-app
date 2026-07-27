@@ -7,7 +7,48 @@ let cashflowData = {
   date: "2026-07-18",
   companies: []
 };
+function showAccessDenied() {
+  const reportDate = getElement("reportDate");
+  const totalClosing = getElement("totalClosing");
+  const companiesGrid = getElement("companiesGrid");
+  const syncNote = getElement("syncNote");
 
+  const telegramId = telegram?.initDataUnsafe?.user?.id || "невідомий";
+
+  if (reportDate) {
+    reportDate.textContent = "Доступ заборонено";
+  }
+
+  if (totalClosing) {
+    totalClosing.textContent = "🔒";
+  }
+
+  if (companiesGrid) {
+    companiesGrid.innerHTML = `
+      <section class="access-denied">
+        <div class="access-denied-icon">🔒</div>
+
+        <h2>Доступ заборонено</h2>
+
+        <p>
+          Ваш Telegram ID не має доступу до фінансового кабінету.
+        </p>
+
+        <div class="access-denied-id">
+          Telegram ID: ${telegramId}
+        </div>
+
+        <p class="access-denied-note">
+          Зверніться до адміністратора для надання доступу.
+        </p>
+      </section>
+    `;
+  }
+
+  if (syncNote) {
+    syncNote.textContent = "Доступ до Cash Flow не надано.";
+  }
+}
 
 async function loadDashboard(date = cashflowData.date) {
   const syncNote = document.getElementById("syncNote");
@@ -51,9 +92,14 @@ async function loadDashboard(date = cashflowData.date) {
   } catch (error) {
     console.error(error);
 
-    if (syncNote) {
-      syncNote.textContent = `Помилка API: ${error.message}`;
-    }
+    if (error.code === "ACCESS_DENIED") {
+  showAccessDenied();
+  return false;
+}
+
+if (syncNote) {
+  syncNote.textContent = `Помилка API: ${error.message}`;
+}
 
     return false;
   }

@@ -23,10 +23,14 @@ export async function fetchDashboard({ date, telegramId }) {
   const data = await response.json();
 
   if (data.success === false) {
-    throw new Error(
-      data.error?.message || "Не вдалося отримати дані."
-    );
-  }
+  const error = new Error(
+    data.error?.message || "Не вдалося отримати дані."
+  );
+
+  error.code = data.error?.code || "API_ERROR";
+
+  throw error;
+}
 
   return data;
 }
@@ -52,9 +56,15 @@ export async function fetchOperations({
 
   const data = await response.json();
 
-  if (data.success === false) {
-    throw new Error(data.error?.message || "Не вдалося отримати операції.");
-  }
+ if (data.success === false) {
+  const error = new Error(
+    data.error?.message || "Не вдалося отримати дані."
+  );
+
+  error.code = data.error?.code || "API_ERROR";
+
+  throw error;
+}
 
   return data;
 }
