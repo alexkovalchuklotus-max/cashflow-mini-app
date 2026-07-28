@@ -15,22 +15,22 @@ export async function fetchDashboard({ date, telegramId }) {
   })}`;
 
   const response = await fetch(url);
+  const data = await response.json();
+
+  if (data.success === false) {
+    const error = new Error(
+      data.error?.message || "Не вдалося отримати дані."
+    );
+
+    error.code = data.error?.code || "API_ERROR";
+    error.status = response.status;
+
+    throw error;
+  }
 
   if (!response.ok) {
     throw new Error(`Dashboard API error: ${response.status}`);
   }
-
-  const data = await response.json();
-
-  if (data.success === false) {
-  const error = new Error(
-    data.error?.message || "Не вдалося отримати дані."
-  );
-
-  error.code = data.error?.code || "API_ERROR";
-
-  throw error;
-}
 
   return data;
 }
@@ -49,37 +49,22 @@ export async function fetchOperations({
   })}`;
 
   const response = await fetch(url);
+  const data = await response.json();
+
+  if (data.success === false) {
+    const error = new Error(
+      data.error?.message || "Не вдалося отримати операції."
+    );
+
+    error.code = data.error?.code || "API_ERROR";
+    error.status = response.status;
+
+    throw error;
+  }
 
   if (!response.ok) {
     throw new Error(`Operations API error: ${response.status}`);
   }
 
-  const data = await response.json();
-
- if (data.success === false) {
-  const error = new Error(
-    data.error?.message || "Не вдалося отримати дані."
-  );
-
-  error.code = data.error?.code || "API_ERROR";
-
-  throw error;
-}
-
   return data;
 }
-
-  //if (!response.ok) {
-   // throw new Error(`Operations API error: ${response.status}`);
- // }
-
-  //const data = await response.json();
-
- // if (data.success === false) {
-   // throw new Error(
-     // data.error?.message || "Не вдалося отримати операції."
-    //);
- // }
-
- // return data;
-//}
