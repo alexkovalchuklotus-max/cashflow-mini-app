@@ -13,6 +13,10 @@ function showAccessDenied() {
   const companiesGrid = getElement("companiesGrid");
   const syncNote = getElement("syncNote");
 
+  const companyCount =
+    document.getElementById("companyCount") ||
+    document.getElementById("companiesCount");
+
   const telegramId = telegram?.initDataUnsafe?.user?.id || "невідомий";
 
   if (reportDate) {
@@ -22,6 +26,9 @@ function showAccessDenied() {
   if (totalClosing) {
     totalClosing.textContent = "🔒";
   }
+  if (companyCount) {
+  companyCount.textContent = "Немає доступу";
+}
 
   if (companiesGrid) {
     companiesGrid.innerHTML = `
