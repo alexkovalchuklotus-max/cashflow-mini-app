@@ -64,10 +64,10 @@ async function loadDashboard(date = cashflowData.date) {
       syncNote.textContent = "Завантаження даних...";
     }
 
-    const data = await fetchDashboard({
-      date,
-      telegramId: telegram?.initDataUnsafe?.user?.id || 123456789
-    });
+     const data = await fetchDashboard({
+  date: date,
+  telegramId: telegram?.initDataUnsafe?.user?.id || ""
+});
 
     const companies = Array.isArray(data.companies)
       ? data.companies
@@ -330,11 +330,11 @@ async function openDetails(companyIndex, type) {
 
   try {
     const data = await fetchOperations({
-      date: cashflowData.date,
-      companyCode: company.code,
-      type: type,
-      telegramId: telegram?.initDataUnsafe?.user?.id || 123456789
-    });
+  date: cashflowData.date,
+  companyCode: company.code,
+  type: type,
+  telegramId: telegram?.initDataUnsafe?.user?.id || ""
+});
 
     const operations = Array.isArray(data.operations)
       ? data.operations
