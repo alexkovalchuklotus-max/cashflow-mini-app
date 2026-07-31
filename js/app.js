@@ -214,7 +214,7 @@ function createCompanyCard(company, index) {
         <button
           class="flow-row clickable payment"
           data-index="${index}"
-          data-type="payments"
+          data-type="payment"
           type="button"
         >
           <div class="flow-label">
@@ -227,7 +227,7 @@ function createCompanyCard(company, index) {
           </div>
 
           <strong class="flow-value">
-            − ${formatMoney(company.payments)}
+            − ${formatMoney(company.payment)}
             <span class="flow-chevron">›</span>
           </strong>
         </button>
