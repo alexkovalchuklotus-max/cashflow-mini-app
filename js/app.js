@@ -13,7 +13,7 @@ function showAccessDenied() {
   const companiesGrid = getElement("companiesGrid");
   const syncNote = getElement("syncNote");
   const companyCount = document.getElementById("companyCount");
-}
+};
   
  function showAccessDenied() {
   const reportDate = getElement("reportDate");
