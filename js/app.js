@@ -15,7 +15,14 @@ function showAccessDenied() {
   const companyCount = document.getElementById("companyCount");
 
   
-  const telegramId = telegram?.initDataUnsafe?.user?.id || "невідомий";
+  const tg = window.Telegram?.WebApp;
+
+let telegramId = tg?.initDataUnsafe?.user?.id;
+
+// ВРЕМЕННО для теста в браузере:
+if (!telegramId) {
+  telegramId = 459183589; // сюда твой Telegram ID
+}
 
   if (reportDate) {
     reportDate.textContent = "Доступ заборонено";
