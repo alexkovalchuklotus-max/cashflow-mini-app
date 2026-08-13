@@ -54,7 +54,9 @@
   padding: 16px;
   z-index: 1000;
 }
-
+.calendar-backdrop[hidden] {
+  display: none;
+}
 .calendar-modal {
   width: 100%;
   max-width: 340px;
