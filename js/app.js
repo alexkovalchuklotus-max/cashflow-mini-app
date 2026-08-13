@@ -7,13 +7,6 @@ let cashflowData = {
   date: "2026-07-18",
   companies: []
 };
-function showAccessDenied() {
-  const reportDate = getElement("reportDate");
-  const totalClosing = getElement("totalClosing");
-  const companiesGrid = getElement("companiesGrid");
-  const syncNote = getElement("syncNote");
-  const companyCount = document.getElementById("companyCount");
-};
   
  function showAccessDenied() {
   const reportDate = getElement("reportDate");
@@ -119,9 +112,6 @@ if (syncNote) {
     return false;
   }
 }
-telegram.ready();
-telegram.expand();
-loadDashboard();
 
 function getElement(id) {
   const element = document.getElementById(id);
@@ -492,7 +482,6 @@ nextDayButton?.addEventListener("click", async () => {
 
 function initApp() {
   setupTelegram();
-  renderDashboard();
   setupEvents();
 }
 
