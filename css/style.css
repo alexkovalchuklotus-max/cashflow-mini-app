@@ -107,6 +107,8 @@
 
 .calendar-day {
   aspect-ratio: 1;
+  min-height: 38px;
+width: 100%;
   border: 0;
   border-radius: 12px;
   background: transparent;

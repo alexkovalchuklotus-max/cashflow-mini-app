@@ -456,13 +456,10 @@ function renderCalendar() {
   monthTitle.textContent = `${monthNamesUk[month]} ${year}`;
 
   const firstDay = new Date(year, month, 1);
-  const lastDay = new Date(year, month + 1, 0);
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  let startWeekday = firstDay.getDay();
-
-  // JS: Неділя = 0
-  // Нам потрібно: Понеділок = 0
-  startWeekday = (startWeekday + 6) % 7;
+  // Пн = 0, Вт = 1 ... Нд = 6
+  const startWeekday = (firstDay.getDay() + 6) % 7;
 
   const selectedDate = cashflowData.date;
 
@@ -473,53 +470,46 @@ function renderCalendar() {
     String(today.getDate()).padStart(2, "0")
   ].join("-");
 
-  let html = "";
+  // Полностью очищаем сетку
+  daysContainer.innerHTML = "";
 
+  // Пустые клетки перед первым числом месяца
   for (let i = 0; i < startWeekday; i++) {
-    html += `<span class="calendar-day empty"></span>`;
+    const empty = document.createElement("span");
+    empty.className = "calendar-day empty";
+    daysContainer.appendChild(empty);
   }
 
-  for (let day = 1; day <= lastDay.getDate(); day++) {
+  // Числа месяца
+  for (let day = 1; day <= daysInMonth; day++) {
     const dateString = [
       year,
       String(month + 1).padStart(2, "0"),
       String(day).padStart(2, "0")
     ].join("-");
 
-    const classes = ["calendar-day"];
+    const button = document.createElement("button");
+
+    button.type = "button";
+    button.className = "calendar-day";
+    button.textContent = String(day);
+    button.dataset.date = dateString;
 
     if (dateString === selectedDate) {
-      classes.push("selected");
+      button.classList.add("selected");
     }
 
     if (dateString === todayString) {
-      classes.push("today");
+      button.classList.add("today");
     }
 
-    html += `
-      <button
-        class="${classes.join(" ")}"
-        type="button"
-        data-date="${dateString}"
-      >
-        ${day}
-      </button>
-    `;
-  }
-
-  daysContainer.innerHTML = html;
-
-  daysContainer
-    .querySelectorAll(".calendar-day[data-date]")
-    .forEach(button => {
-      button.addEventListener("click", async () => {
-        const selectedDate = button.dataset.date;
-
-        closeCalendar();
-
-        await loadDashboard(selectedDate);
-      });
+    button.addEventListener("click", async () => {
+      closeCalendar();
+      await loadDashboard(dateString);
     });
+
+    daysContainer.appendChild(button);
+  }
 }
 function setupEvents() {
   const openCalendarButton = getElement("openCalendar");
