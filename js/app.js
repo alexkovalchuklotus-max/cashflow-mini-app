@@ -146,6 +146,12 @@ function calculateTotalClosing() {
 }
 
 function createCompanyCard(company, index) {
+  console.log(
+  company.code,
+  company.payment,
+  company.payments,
+  company
+);
   return `
     <article class="company-card">
       <header class="company-header">
