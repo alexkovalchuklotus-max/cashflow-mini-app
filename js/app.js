@@ -13,16 +13,18 @@ function showAccessDenied() {
   const companiesGrid = getElement("companiesGrid");
   const syncNote = getElement("syncNote");
   const companyCount = document.getElementById("companyCount");
+}
+  
+ function showAccessDenied() {
+  const reportDate = getElement("reportDate");
+  const totalClosing = getElement("totalClosing");
+  const companiesGrid = getElement("companiesGrid");
+  const syncNote = getElement("syncNote");
+  const companyCount = document.getElementById("companyCount");
 
   
-  const tg = window.Telegram?.WebApp;
+  const telegramId = telegram?.initDataUnsafe?.user?.id || "невідомий";
 
-let telegramId = tg?.initDataUnsafe?.user?.id;
-
-// ВРЕМЕННО для теста в браузере:
-if (!telegramId) {
-  telegramId = 459183589; // сюда твой Telegram ID
-}
 
   if (reportDate) {
     reportDate.textContent = "Доступ заборонено";
@@ -240,7 +242,11 @@ function createCompanyCard(company, index) {
           </div>
 
           <strong class="flow-value">
-            − ${formatMoney(company.payment)}
+           − ${formatMoney(
+  Number(company.opening) +
+  Number(company.income) -
+  Number(company.closing)
+)}
             <span class="flow-chevron">›</span>
           </strong>
         </button>
