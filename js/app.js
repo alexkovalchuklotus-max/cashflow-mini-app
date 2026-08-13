@@ -399,8 +399,134 @@ function setupTelegram() {
   telegram.setHeaderColor?.("#eef2f7");
   telegram.setBackgroundColor?.("#eef2f7");
 }
+let calendarViewDate = new Date();
 
+const monthNamesUk = [
+  "Січень",
+  "Лютий",
+  "Березень",
+  "Квітень",
+  "Травень",
+  "Червень",
+  "Липень",
+  "Серпень",
+  "Вересень",
+  "Жовтень",
+  "Листопад",
+  "Грудень"
+];
+
+function openCalendar() {
+  const backdrop = getElement("calendarBackdrop");
+
+  const selectedDate = new Date(`${cashflowData.date}T12:00:00`);
+
+  calendarViewDate = new Date(
+    selectedDate.getFullYear(),
+    selectedDate.getMonth(),
+    1
+  );
+
+  renderCalendar();
+
+  if (backdrop) {
+    backdrop.hidden = false;
+  }
+}
+
+function closeCalendar() {
+  const backdrop = getElement("calendarBackdrop");
+
+  if (backdrop) {
+    backdrop.hidden = true;
+  }
+}
+
+function renderCalendar() {
+  const monthTitle = getElement("calendarMonthTitle");
+  const daysContainer = getElement("calendarDays");
+
+  if (!monthTitle || !daysContainer) {
+    return;
+  }
+
+  const year = calendarViewDate.getFullYear();
+  const month = calendarViewDate.getMonth();
+
+  monthTitle.textContent = `${monthNamesUk[month]} ${year}`;
+
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+
+  let startWeekday = firstDay.getDay();
+
+  // JS: Неділя = 0
+  // Нам потрібно: Понеділок = 0
+  startWeekday = (startWeekday + 6) % 7;
+
+  const selectedDate = cashflowData.date;
+
+  const today = new Date();
+  const todayString = [
+    today.getFullYear(),
+    String(today.getMonth() + 1).padStart(2, "0"),
+    String(today.getDate()).padStart(2, "0")
+  ].join("-");
+
+  let html = "";
+
+  for (let i = 0; i < startWeekday; i++) {
+    html += `<span class="calendar-day empty"></span>`;
+  }
+
+  for (let day = 1; day <= lastDay.getDate(); day++) {
+    const dateString = [
+      year,
+      String(month + 1).padStart(2, "0"),
+      String(day).padStart(2, "0")
+    ].join("-");
+
+    const classes = ["calendar-day"];
+
+    if (dateString === selectedDate) {
+      classes.push("selected");
+    }
+
+    if (dateString === todayString) {
+      classes.push("today");
+    }
+
+    html += `
+      <button
+        class="${classes.join(" ")}"
+        type="button"
+        data-date="${dateString}"
+      >
+        ${day}
+      </button>
+    `;
+  }
+
+  daysContainer.innerHTML = html;
+
+  daysContainer
+    .querySelectorAll(".calendar-day[data-date]")
+    .forEach(button => {
+      button.addEventListener("click", async () => {
+        const selectedDate = button.dataset.date;
+
+        closeCalendar();
+
+        await loadDashboard(selectedDate);
+      });
+    });
+}
 function setupEvents() {
+  const openCalendarButton = getElement("openCalendar");
+const calendarBackdrop = getElement("calendarBackdrop");
+const calendarPrevMonth = getElement("calendarPrevMonth");
+const calendarNextMonth = getElement("calendarNextMonth");
+const calendarToday = getElement("calendarToday");
   const closeModalButton = getElement("closeModal");
   const detailsModal = getElement("detailsModal");
   const refreshButton = getElement("refreshButton");
@@ -408,6 +534,37 @@ function setupEvents() {
   const nextDayButton = getElement("nextDay");
 
   closeModalButton?.addEventListener("click", closeDetails);
+  openCalendarButton?.addEventListener("click", openCalendar);
+
+calendarBackdrop?.addEventListener("click", event => {
+  if (event.target === calendarBackdrop) {
+    closeCalendar();
+  }
+});
+
+calendarPrevMonth?.addEventListener("click", () => {
+  calendarViewDate.setMonth(calendarViewDate.getMonth() - 1);
+  renderCalendar();
+});
+
+calendarNextMonth?.addEventListener("click", () => {
+  calendarViewDate.setMonth(calendarViewDate.getMonth() + 1);
+  renderCalendar();
+});
+
+calendarToday?.addEventListener("click", async () => {
+  const today = new Date();
+
+  const todayString = [
+    today.getFullYear(),
+    String(today.getMonth() + 1).padStart(2, "0"),
+    String(today.getDate()).padStart(2, "0")
+  ].join("-");
+
+  closeCalendar();
+
+  await loadDashboard(todayString);
+});
 
   detailsModal?.addEventListener("click", event => {
     if (event.target === detailsModal) {

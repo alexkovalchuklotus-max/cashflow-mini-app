@@ -15,10 +15,46 @@
       <button class="icon-button" id="refreshButton" type="button">↻</button>
     </header>
     <section class="date-panel">
-      <button class="date-arrow" id="previousDay" type="button">‹</button>
-      <div class="date-center"><span>Дата звіту</span><strong id="reportDate">14.07.2026</strong></div>
-      <button class="date-arrow" id="nextDay" type="button">›</button>
-    </section>
+  <button class="date-arrow" id="previousDay" type="button">‹</button>
+
+  <button class="date-center date-picker-button" id="openCalendar" type="button">
+    <span>Дата звіту</span>
+    <strong id="reportDate">14.07.2026</strong>
+  </button>
+
+  <button class="date-arrow" id="nextDay" type="button">›</button>
+</section>
+<div class="calendar-backdrop" id="calendarBackdrop" hidden>
+  <div class="calendar-modal">
+
+    <div class="calendar-header">
+      <button id="calendarPrevMonth" type="button">‹</button>
+
+      <strong id="calendarMonthTitle">
+        Серпень 2026
+      </strong>
+
+      <button id="calendarNextMonth" type="button">›</button>
+    </div>
+
+    <div class="calendar-weekdays">
+      <span>Пн</span>
+      <span>Вт</span>
+      <span>Ср</span>
+      <span>Чт</span>
+      <span>Пт</span>
+      <span>Сб</span>
+      <span>Нд</span>
+    </div>
+
+    <div class="calendar-days" id="calendarDays"></div>
+
+    <button class="calendar-today" id="calendarToday" type="button">
+      Сьогодні
+    </button>
+
+  </div>
+</div>
     <section class="summary-card">
       <div><span>Загальний залишок на кінець дня</span><strong id="totalClosing">0,00 ₴</strong></div>
       <div class="summary-badge" id="companyCount">4 підприємства</div>
