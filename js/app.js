@@ -3,8 +3,19 @@ import { fetchDashboard, fetchOperations } from "./api.js";
 
 const telegram = window.Telegram?.WebApp;
 
+function getYesterdayDate() {
+  const date = new Date();
+  date.setDate(date.getDate() - 1);
+
+  return [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0")
+  ].join("-");
+}
+
 let cashflowData = {
-  date: "2026-07-18",
+  date: getYesterdayDate(),
   companies: []
 };
   
@@ -254,7 +265,8 @@ function renderDashboard() {
     return;
   }
 
-  reportDate.textContent = cashflowData.date;
+  const [year, month, day] = cashflowData.date.split("-");
+reportDate.textContent = `${day}.${month}.${year}`;
   totalClosing.textContent = formatMoney(calculateTotalClosing());
 
   companiesGrid.innerHTML = cashflowData.companies
