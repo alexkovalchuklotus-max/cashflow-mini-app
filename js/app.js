@@ -350,14 +350,10 @@ async function openDetails(companyIndex, type) {
   telegram?.HapticFeedback?.impactOccurred("light");
 
   try {
-    const apiType = type === "income"
-  ? "payment"
-  : "income";
-
-const data = await fetchOperations({
+ const data = await fetchOperations({
   date: cashflowData.date,
   companyCode: company.code,
-  type: apiType,
+  type: type,
   telegramId: telegram?.initDataUnsafe?.user?.id || ""
 });
 
