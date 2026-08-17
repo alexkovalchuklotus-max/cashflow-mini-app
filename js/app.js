@@ -222,11 +222,7 @@ function createCompanyCard(company, index) {
           </div>
 
           <strong class="flow-value">
-            + ${formatMoney(
-  Number(company.opening) +
-  Number(company.income) -
-  Number(company.closing)
-)}
+           + ${formatMoney(company.income)}
             <span class="flow-chevron">›</span>
           </strong>
         </button>
@@ -247,7 +243,7 @@ function createCompanyCard(company, index) {
           </div>
 
           <strong class="flow-value">
-           − ${formatMoney(company.income)}
+           − ${formatMoney(company.payments)}
             <span class="flow-chevron">›</span>
           </strong>
         </button>
