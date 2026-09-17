@@ -1,8 +1,8 @@
 const DASHBOARD_API_URL =
-  "https://hook.eu2.make.com/twemwtvqbpp7bkt9ymhi41k7flmlzxjk";
+  "https://hook.eu1.make.com/n73y197i5ss4q9l8a94vckpc5xv2lpsx";
 
 const OPERATIONS_API_URL =
-  "https://hook.eu2.make.com/9g6al424xaqvktj4grwso59q71rv6aj9";
+  "https://hook.eu1.make.com/ryrvxfvg4ik4w6t9pl51b6379ragpqux";
 
 function buildQuery(params) {
   return new URLSearchParams(params).toString();
