@@ -412,10 +412,26 @@ function getFinkyRelations(entity) {
       return {
         debtor: value < 0 ? entity.name : row.name,
         creditor: value < 0 ? row.name : entity.name,
-        amount: Math.abs(value)
+        amount: value
       };
     })
     .filter(Boolean);
+}
+
+function createFinkyInlineRelation(relation) {
+  return `
+    <div class="finky-inline-relation">
+      <span class="finky-inline-route">
+        ${relation.debtor} → ${relation.creditor}
+      </span>
+
+      <strong
+        class="finky-inline-amount ${getMoneyClass(relation.amount)}"
+      >
+        ${formatMoney(relation.amount)}
+      </strong>
+    </div>
+  `;
 }
 
 function createFinkyCard(entity, index) {
@@ -464,6 +480,12 @@ function createFinkyCard(entity, index) {
             <span class="flow-chevron">›</span>
           </strong>
         </button>
+
+        <div class="finky-inline-relations">
+          ${relations.length
+            ? relations.map(createFinkyInlineRelation).join("")
+            : `<p class="finky-inline-empty">Взаєморозрахунків немає.</p>`}
+        </div>
       </div>
     </article>
   `;
@@ -477,7 +499,9 @@ function createFinkyRelationCard(relation) {
           ${relation.debtor} → ${relation.creditor}
         </div>
 
-        <div class="operation-amount">
+        <div
+          class="operation-amount ${getMoneyClass(relation.amount)}"
+        >
           ${formatMoney(relation.amount)}
         </div>
       </div>
