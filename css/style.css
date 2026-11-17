@@ -154,3 +154,66 @@ width: 100%;
   background: transparent;
   cursor: pointer;
 }
+.page-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 16px;
+  padding: 5px;
+  border: 1px solid var(--border);
+  border-radius: 17px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.page-tab {
+  padding: 11px 14px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.page-tab.active {
+  background: #0f172a;
+  color: #ffffff;
+  box-shadow: 0 5px 14px rgba(15, 23, 42, 0.18);
+}
+
+.page-view.hidden {
+  display: none;
+}
+
+.finky-date-panel {
+  justify-content: center;
+}
+
+.finky-date-panel .date-center {
+  width: 100%;
+}
+
+.finky-details-button .flow-value {
+  color: #7c3aed;
+}
+
+.money-positive {
+  color: var(--green);
+}
+
+.money-negative {
+  color: var(--red);
+}
+
+.money-zero {
+  color: var(--muted);
+}
+
+.finky-relation-card .operation-name {
+  line-height: 1.35;
+}
+
+.finky-relation-card .operation-purpose {
+  margin-top: 7px;
+}

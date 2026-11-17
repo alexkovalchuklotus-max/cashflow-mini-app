@@ -47,6 +47,8 @@ export async function fetchOperations({
     type,
     telegram_id: telegramId
   })}`;
+  const FINKY_API_URL =
+  "https://hook.eu2.make.com/suakcyafjhsjbmyunct7qxpix9cnbmg2";
 
   const response = await fetch(url);
   const data = await response.json();
@@ -64,6 +66,31 @@ export async function fetchOperations({
 
   if (!response.ok) {
     throw new Error(`Operations API error: ${response.status}`);
+  }
+
+  return data;
+}
+export async function fetchFinky({ telegramId }) {
+  const url = `${FINKY_API_URL}?${buildQuery({
+    telegram_id: telegramId
+  })}`;
+
+  const response = await fetch(url);
+  const data = await response.json();
+
+  if (data.success === false) {
+    const error = new Error(
+      data.error?.message || "Не вдалося отримати дані «Фінки»."
+    );
+
+    error.code = data.error?.code || "API_ERROR";
+    error.status = response.status;
+
+    throw error;
+  }
+
+  if (!response.ok) {
+    throw new Error(`Finky API error: ${response.status}`);
   }
 
   return data;
