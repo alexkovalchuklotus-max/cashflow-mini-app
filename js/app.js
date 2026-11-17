@@ -410,6 +410,9 @@ function getFinkyRelations(entity) {
       }
 
       return {
+        entity: entity.name,
+        counterparty: row.name,
+        arrow: value < 0 ? "→" : "←",
         debtor: value < 0 ? entity.name : row.name,
         creditor: value < 0 ? row.name : entity.name,
         amount: value
@@ -422,7 +425,7 @@ function createFinkyInlineRelation(relation) {
   return `
     <div class="finky-inline-relation">
       <span class="finky-inline-route">
-        ${relation.debtor} → ${relation.creditor}
+        ${relation.entity} ${relation.arrow} ${relation.counterparty}
       </span>
 
       <strong
@@ -496,7 +499,7 @@ function createFinkyRelationCard(relation) {
     <article class="operation-card finky-relation-card">
       <div class="operation-top">
         <div class="operation-name">
-          ${relation.debtor} → ${relation.creditor}
+          ${relation.entity} ${relation.arrow} ${relation.counterparty}
         </div>
 
         <div
