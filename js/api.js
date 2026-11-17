@@ -4,6 +4,9 @@ const DASHBOARD_API_URL =
 const OPERATIONS_API_URL =
   "https://hook.eu1.make.com/ryrvxfvg4ik4w6t9pl51b6379ragpqux";
 
+const FINKY_API_URL =
+  "https://hook.eu2.make.com/suakcyafjhsjbmyunct7qxpix9cnbmg2";
+
 function buildQuery(params) {
   return new URLSearchParams(params).toString();
 }
@@ -47,8 +50,6 @@ export async function fetchOperations({
     type,
     telegram_id: telegramId
   })}`;
-  const FINKY_API_URL =
-  "https://hook.eu2.make.com/suakcyafjhsjbmyunct7qxpix9cnbmg2";
 
   const response = await fetch(url);
   const data = await response.json();
@@ -70,6 +71,7 @@ export async function fetchOperations({
 
   return data;
 }
+
 export async function fetchFinky({ telegramId }) {
   const url = `${FINKY_API_URL}?${buildQuery({
     telegram_id: telegramId
