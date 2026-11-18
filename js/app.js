@@ -468,22 +468,6 @@ function createFinkyCard(entity, index) {
       </header>
 
       <div class="flows">
-        <button
-          class="flow-row clickable finky-details-button"
-          data-finky-index="${index}"
-          type="button"
-        >
-          <div class="flow-label">
-            <span class="flow-dot" style="background: #7c3aed"></span>
-            <span>Взаєморозрахунки</span>
-          </div>
-
-          <strong class="flow-value">
-            ${relations.length} позицій
-            <span class="flow-chevron">›</span>
-          </strong>
-        </button>
-
         <div class="finky-inline-relations">
           ${relations.length
             ? relations.map(createFinkyInlineRelation).join("")
